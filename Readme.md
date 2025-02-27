@@ -100,6 +100,39 @@ A new **Function Execution Context** is created again.
 ✔ **Each function execution has its own memory space (Variable Environment).**  
 ✔ **Once a function returns a value, its Execution Context is deleted from the Call Stack.**  
 
----
-This structured breakdown helps understand how JavaScript handles function calls and execution order. 🚀
+
+
+---------------------
+---------------------
+---------------------
+
+
+### Shortest function in JavaScript is the empty file of JS
+
+## Code Breakdown:
+
+```javascript
+var a = 10;
+
+function b() {
+    var x = 1100;
+}
+```
+
+### Global Scope:
+- The variable `a` is declared using `var`, so it is hoisted to the global execution context.
+- In the browser, the global execution context is associated with the `window` object, meaning you can access `a` as `window.a`.
+
+### Function Scope:
+- The function `b` is also in the global scope, meaning it is accessible as `window.b`.
+- However, the variable `x` inside `b()` is not global. It is function-scoped and only exists while `b` is executing.
+
+### Checking in the Browser Console:
+You can verify this by running:
+
+```javascript
+console.log(window.a); // 10
+console.log(window.b); // function b() { var x = 1100; }
+console.log(window.x); // undefined (because x is not in the global scope)
+```
 
