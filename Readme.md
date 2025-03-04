@@ -340,4 +340,154 @@ console.log(add(5, 3)); // ✅ 8
 ```
 
 
+--------------------
+--------------------
+-------------------
+
+# Understanding Closures in JavaScript
+
+## What is a Closure?
+A **closure** is a function that remembers the variables from its **lexical scope**, even when the function is executed outside that scope.
+
+In simple terms, **a closure allows a function to "remember" the environment in which it was created**.
+
+## Explanation with Examples
+
+### 1️⃣ Basic Closure Example
+```javascript
+function outerFunction() {
+    var message = "Hello, I am a closure!";
+    
+    function innerFunction() {
+        console.log(message);
+    }
+    
+    return innerFunction;
+}
+
+const myFunc = outerFunction();
+myFunc(); // Output: Hello, I am a closure!
+```
+🔹 Even though `outerFunction` has finished execution, `innerFunction` still **remembers** the `message` variable.
+
+---
+
+### 2️⃣ setTimeout and Closure Issue
+```javascript
+function x() {
+    var i = 10;
+    setTimeout(function () {
+        console.log(i);
+    }, 3000);
+    console.log("Namaste JavaScript");
+}
+x();
+```
+**Output:**
+```
+Namaste JavaScript
+10 (after 3 seconds)
+```
+✅ **Explanation:**
+- `console.log("Namaste JavaScript")` runs immediately.
+- `setTimeout` registers a function that logs `i` after 3 seconds.
+
+---
+
+### 3️⃣ Loop with `var` (Closure Issue)
+```javascript
+function x() {
+    for (var i = 1; i <= 8; i++) {
+        setTimeout(function () {
+            console.log(i);
+        }, i * 1000);
+    }
+    console.log("Hello");
+}
+x();
+```
+**Expected Output:**
+```
+Hello
+1 2 3 4 5 6 7 8
+```
+**Actual Output:**
+```
+Hello
+9 (after 1 sec)
+9 (after 2 sec)
+9 (after 3 sec)
+9 (after 4 sec)
+9 (after 5 sec)
+9 (after 6 sec)
+9 (after 7 sec)
+9 (after 8 sec)
+```
+❌ **Issue:**
+- `var` is **function-scoped**, meaning all callbacks inside `setTimeout` share the same `i`, which becomes `9` after the loop finishes.
+
+✅ **Fix 1: Using `let` (Block Scope)**
+```javascript
+function x() {
+    for (let i = 1; i <= 4; i++) {
+        setTimeout(function () {
+            console.log(i);
+        }, i * 1000);
+    }
+    console.log("Dikshant");
+}
+x();
+```
+**Correct Output:**
+```
+Dikshant
+1 (after 1 sec)
+2 (after 2 sec)
+3 (after 3 sec)
+4 (after 4 sec)
+```
+✅ **Why does this work?**
+- `let` is **block-scoped**, so a new `i` is created for each iteration.
+
+✅ **Fix 2: Using a Closure to Store `i`**
+```javascript
+function x() {
+    for (var i = 1; i <= 4; i++) {
+        function close(x) {
+            setTimeout(function () {
+                console.log(x);
+            }, x * 1000);
+        }
+        close(i);
+    }
+    console.log("Dikshant");
+}
+x();
+```
+**Correct Output:**
+```
+Dikshant
+1 (after 1 sec)
+2 (after 2 sec)
+3 (after 3 sec)
+4 (after 4 sec)
+```
+✅ **Why does this work?**
+- We pass `i` to a function (`close`), creating a **new scope** with `x` storing the correct value.
+
+---
+
+## Summary
+✔ **Closures allow functions to remember variables even after execution ends.**
+
+✔ Used for **private variables, custom functions, and state management.**
+
+✔ **Common mistakes:** Using `var` inside loops, memory leaks, and deep nesting.
+
+✔ **Fix issues** by using `let` or wrapping values in another function (closure).
+
+**Closures are powerful in JavaScript for handling async operations, callbacks, and encapsulating data!** 
+
+
+
 
